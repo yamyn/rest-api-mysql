@@ -26,7 +26,7 @@ router.get('/', UserComponent.findAll);
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-router.get('/statistic', UserComponent.getStatistic);
+router.post('/statistic', UserComponent.getStatistic);
 
 /**
  * Route serving a user

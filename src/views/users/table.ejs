@@ -1,10 +1,23 @@
 <h1>UsersList</h1>
 <section class="row justify-content-center py-3">
     <div class="col-4 text-left p-0">
-        <form action="/v1/users/statistic" method="get">
-            <button type="submit" class="btn btn-primary">
-                Get statistic for 30 days
-            </button>
+        <form action="/v1/users/statistic" method="post" class="row">
+            <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
+            <div class="col-6">
+                <select class="custom-select" name="period">
+                    <option selected value="30">Choose period</option>
+                    <option value="10">10 days</option>
+                    <option value="15">15 days</option>
+                    <option value="20">20 days</option>
+                    <option value="25">25 days</option>
+                    <option value="30">30 days</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary">
+                    Get statistic 
+                </button>
+             </div>
         </form>
     </div>
     <div class="col-4 text-center p-0">

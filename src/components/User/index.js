@@ -1,6 +1,6 @@
 const UserService = require('./services/tableService');
-// const UserValidation = require('./validation');
-// const ValidationError = require('../../error/ValidationError');
+const UserValidation = require('./validation');
+const ValidationError = require('../../error/ValidationError');
 const transformateStat = require('./services/statistic');
 
 /**
@@ -15,10 +15,10 @@ async function findAll(req, res, next) {
         const users = await UserService.findAll();
 
         res.status(200).render('index', {
+            users,
             table: 'home',
             csrfToken: req.csrfToken(),
             template: 'users/table.ejs',
-            users,
             errors: req.flash('error'),
             successes: req.flash('sucsess'),
         });
@@ -42,13 +42,14 @@ async function findAll(req, res, next) {
  */
 async function getStatistic(req, res, next) {
     try {
-        const statisticArr = await UserService.getStatistic(30);
+        const statisticArr = await UserService.getStatistic(req.body.period);
         const statistic = transformateStat(statisticArr);
 
         res.status(200).render('index', {
+            statistic,
+            period: req.body.period,
             csrfToken: req.csrfToken(),
             template: 'users/statistic.ejs',
-            statistic,
             errors: req.flash('error'),
             successes: req.flash('sucsess'),
         });
@@ -70,33 +71,33 @@ async function getStatistic(req, res, next) {
  */
 async function findByEmail(req, res, next) {
     try {
-        // const { error } = UserValidation.findById(req.params);
+        const { email } = req.body;
 
-        // if (error) {
-        //     throw new ValidationError(error.details);
-        // }
-        // console.log(req.body.email);
-        const users = await UserService.findByEmail(req.body.email);
+        const { error } = UserValidation.findById(email);
+
+        if (error) {
+            throw new ValidationError(error.details);
+        }
+
+        const users = await UserService.findByEmail(email);
 
         if (users.length === 0) {
-            req.flash('error', { name: 'Not Found', message: `User with email ${req.body.email} not found!` });
+            req.flash('error', { name: 'Not Found', message: `User with email ${email} not found!` });
             res.redirect('/v1/users');
         }
         res.status(200).render('index', {
+            users,
             table: 'find',
             csrfToken: req.csrfToken(),
             template: 'users/table.ejs',
-            users,
             errors: req.flash('error'),
             successes: req.flash('sucsess'),
         });
     } catch (error) {
-        // if (error instanceof ValidationError) {
-        //     return res.status(422).json({
-        //         error: error.name,
-        //         details: error.message,
-        //     });
-        // }
+        if (error instanceof ValidationError) {
+            req.flash('error', error.message);
+            return res.redirect('/v1/users');
+        }
 
         req.flash('error', { name: error.name, message: error.message });
         res.redirect('/v1/users');
@@ -114,11 +115,11 @@ async function findByEmail(req, res, next) {
  */
 async function create(req, res, next) {
     try {
-        // const { error } = UserValidation.create(req.body);
+        const { error } = UserValidation.create(req.body);
 
-        // if (error) {
-        //     throw new ValidationError(error.details);
-        // }
+        if (error) {
+            throw new ValidationError(error.details);
+        }
 
         const { insertId } = await UserService.create(req.body);
 
@@ -129,14 +130,11 @@ async function create(req, res, next) {
         });
         return res.redirect('/v1/users');
     } catch (error) {
-        // if (error instanceof ValidationError) {
-        //     req.flash('error', error.message);
-        //     return res.redirect('/v1/users');
-        // }
-        // if (error.name === 'MongoError') {
-        //     req.flash('error', { name: error.name, message: error.errmsg });
-        //     return res.redirect('/v1/users');
-        // }
+        if (error instanceof ValidationError) {
+            req.flash('error', error.message);
+            return res.redirect('/v1/users');
+        }
+
         req.flash('error', { name: error.name, message: error.message });
         res.redirect('/v1/users');
 
@@ -153,12 +151,11 @@ async function create(req, res, next) {
  */
 async function updateById(req, res, next) {
     try {
-        // const { error } = UserValidation.updateById(req.body);
+        const { error } = UserValidation.updateById(req.body);
 
-        // if (error) {
-        //     console.log(error);
-        //     throw new ValidationError(error.details);
-        // }
+        if (error) {
+            throw new ValidationError(error.details);
+        }
 
         const result = await UserService.updateById(req.body);
         if (result.changedRows) {
@@ -171,10 +168,10 @@ async function updateById(req, res, next) {
 
         return res.redirect('/v1/users');
     } catch (error) {
-        // if (error instanceof ValidationError) {
-        //     req.flash('error', error.message);
-        //     return res.redirect('/v1/users');
-        // }
+        if (error instanceof ValidationError) {
+            req.flash('error', error.message);
+            return res.redirect('/v1/users');
+        }
 
         req.flash('error', { name: error.name, message: error.message });
         res.redirect('/v1/users');
@@ -192,11 +189,11 @@ async function updateById(req, res, next) {
  */
 async function deleteById(req, res, next) {
     try {
-        // const { error } = UserValidation.deleteById(req.body);
+        const { error } = UserValidation.deleteById(req.body);
 
-        // if (error) {
-        //     throw new ValidationError(error.details);
-        // }
+        if (error) {
+            throw new ValidationError(error.details);
+        }
         const { serverStatus } = await UserService.deleteById(req.body.id);
 
         if (serverStatus === 2) {
@@ -208,13 +205,13 @@ async function deleteById(req, res, next) {
 
         return res.redirect('/v1/users');
     } catch (error) {
-        // if (error instanceof ValidationError) {
-        //     return res.status(422).render('errors/validError.ejs', {
-        //         method: 'delete',
-        //         name: error.name,
-        //         message: error.message[0].message,
-        //     });
-        // }
+        if (error instanceof ValidationError) {
+            return res.status(422).render('errors/validError.ejs', {
+                method: 'delete',
+                name: error.name,
+                message: error.message[0].message,
+            });
+        }
 
         req.flash('error', { name: error.name, message: error.message });
         res.redirect('/v1/users');

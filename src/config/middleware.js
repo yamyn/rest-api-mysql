@@ -7,6 +7,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const methodOverride = require('method-override');
 const csrf = require('csurf');
+const { secret } = require('./env');
 
 module.exports = {
     /**
@@ -34,7 +35,7 @@ module.exports = {
         //TODO
         app.use(
             session({
-                secret: 'FixicMom',
+                secret,
                 cookie: {
                     maxAge: 3600 * 24,
                 },
@@ -51,10 +52,7 @@ module.exports = {
         app.use(cors());
         // cors
         app.use((req, res, next) => {
-            res.header(
-                'Access-Control-Allow-Methods',
-                'GET, POST, PUT, DELETE, OPTIONS ',
-            );
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS ');
             res.header('Access-Control-Allow-Credentials', '*');
             res.header(
                 'Access-Control-Allow-Headers',

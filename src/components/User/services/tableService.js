@@ -6,7 +6,7 @@ const table = 'users_list';
  * @method findAll
  * @param {}
  * @summary get list of all users
- * @returns Promise<UserModel[]>
+ * @returns Promise<Users[]>
  */
 function findAll() {
     const query = `SELECT * FROM ${table};`;
@@ -19,7 +19,7 @@ function findAll() {
  * @method findById
  * @param {string} id
  * @summary get a user
- * @returns {Promise<UserModel>}
+ * @returns {Promise<User>}
  */
 function findByEmail(email) {
     const uniqueField = 'email';
@@ -33,7 +33,7 @@ function findByEmail(email) {
  * @method findById
  * @param {string} id
  * @summary get a user
- * @returns {Promise<UserModel>}
+ * @returns {Promise<Cursor>}
  */
 function getStatistic(countDay) {
     const criteria = 'created_at';
@@ -51,10 +51,10 @@ function getStatistic(countDay) {
  * @method create
  * @param {object} profile
  * @summary create a new user
- * @returns {Promise<UserModel>}
+ * @returns {Promise<ResultSetHeader>}
  */
 function create({ fullName, email }) {
-    const query = `INSERT INTO ${table} VALUES (NULL, '${fullName}', '${email}', NOW(), NOW();`;
+    const query = `INSERT INTO ${table} VALUES (NULL, '${fullName}', '${email}', NOW(), NOW());`;
 
     return mySql.query(query);
 }
@@ -63,10 +63,9 @@ function create({ fullName, email }) {
  * Find a user by id and update his profile
  * @exports
  * @method updateById
- * @param {string} _id
- * @param {object} newProfile
+ * @param {object} profile
  * @summary update a user's profile
- * @returns {Promise<void>}
+ * @returns {Promise<ResultSetHeader>}
  */
 function updateById({ id, fullName }) {
     const uniqueField = 'id';
@@ -79,9 +78,9 @@ function updateById({ id, fullName }) {
 /**
  * @exports
  * @method deleteById
- * @param {string} _id
+ * @param {string} id
  * @summary delete a user from database
- * @returns {Promise<void>}
+ * @returns {Promise<ResultSetHeader}
  */
 function deleteById(id) {
     const uniqueField = 'id';

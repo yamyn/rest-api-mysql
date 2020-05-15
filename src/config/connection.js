@@ -1,14 +1,14 @@
 const mysql = require('mysql2');
 const util = require('util');
-require('dotenv').config();
+const { db } = require('./env');
 
 class Connect {
     constructor() {
         this.connection = mysql.createPool({
-            host: process.env.MYSQL_HOST,
-            user: process.env.MYSQL_USERNAME,
-            password: process.env.MYSQL_PASSWORD,
-            database: process.env.MYSQL_DBNAME,
+            host: db.host,
+            user: db.user,
+            password: db.password,
+            database: db.database,
         });
     }
 
