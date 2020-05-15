@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="staticBackdrop"
+    data-backdrop="static"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    Creating a new user
+                </h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
+                    <div class="form-group">
+                        <input
+                            placeholder="Full name"
+                            type="text"
+                            class="form-control"
+                            id="exampleInputPassword1"
+                            name="fullName"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <input
+                            placeholder="Email address"
+                            type="email"
+                            class="form-control"
+                            id="userEmail"
+                            aria-describedby="emailHelp"
+                            name="email"
+                        />
+                        <small id="emailHelp" class="form-text text-muted"
+                            >We'll never share your email with anyone
+                            else.</small
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Submit
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

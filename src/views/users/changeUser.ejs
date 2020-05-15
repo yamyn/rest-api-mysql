@@ -1,0 +1,104 @@
+<!-- Modal for upadate user-->
+<div
+    class="modal fade"
+    id="staticBackdrop-1"
+    data-backdrop="static"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    Upadate user profile
+                </h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="?_method=PUT" method="post" id="updateUserForm">
+                    <input
+                        type="hidden"
+                        name="_csrf"
+                        value="<%= csrfToken %>"
+                    />
+                    <div class="form-group">
+                        <input
+                            placeholder="Full name"
+                            type="text"
+                            class="form-control"
+                            id="exampleInputPassword1"
+                            name="fullName"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Sign up
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Delete user-->
+<div
+    class="modal fade"
+    id="deleteUserModal"
+    data-backdrop="static"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    Delete user profile?
+                </h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form
+                    action="?_method=DELETE"
+                    method="post"
+                    id="deleteUserForm"
+                >
+                    <input
+                        type="hidden"
+                        name="_csrf"
+                        value="<%= csrfToken %>"
+                    />
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Yes, I`m sure
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary btn-block"
+                    data-dismiss="modal"
+                >
+                    No, back to the list
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="alert-success pl-3" role="alert">
+    <% successes.forEach(sucsses => { %>
+    <h3>Successful operation!!!</h3>
+    <% if(sucsses.method === "post") {%>
+    <strong>New user <%=sucsses.fullName %> was created (with id = <%=sucsses.id %>)!</strong>
+    <% } %> <% if(sucsses.method === "put") {%>
+    <strong>User <%=sucsses.fullName %> (with id = <%=sucsses.id %>) has been updated successfully!</strong>
+    <% } %> <% if(sucsses.method === "delete") {%>
+    <strong>User <%=sucsses.fullName %> (with id = <%=sucsses.id %>) has been deleted successfully!</strong>
+    <% } %> <% }) %>
+</div>

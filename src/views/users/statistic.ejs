@@ -1,0 +1,30 @@
+     <canvas id="myChart"></canvas>
+    <form action="/v1/users" method="get">
+        <button type="submit" class="btn btn-primary">
+            Go to back a UserList
+        </button>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const data = <%- JSON.stringify(statistic) %>
+    const chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: data.labels,
+            datasets: [
+                {
+                    label: 'Added users for the last 30 days',
+                    backgroundColor: '#2547a331',
+                    borderColor: '#2547a3f6',
+                    data: data.count,
+                },
+            ],
+        },
+    });
+</script>

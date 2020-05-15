@@ -1,0 +1,18 @@
+CREATE DATABASE users_db;
+
+USE users_db;
+
+CREATE TABLE users_list
+(
+    id BIGINT(20) NOT NULL
+    AUTO_INCREMENT,
+    PRIMARY KEY
+    (id),
+    fullName VARCHAR
+    (15),
+    email VARCHAR
+    (15) NOT NULL UNIQUE,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON
+    UPDATE CURRENT_TIMESTAMP
+    );

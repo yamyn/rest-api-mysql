@@ -1,0 +1,6 @@
+<div class="alert-danger pl-3" role="alert">
+    <% errors.forEach(error => { %>
+    <h3><%= error.name %></h3>
+    <p><%= error.message %></p>
+    <% }) %>
+</div>

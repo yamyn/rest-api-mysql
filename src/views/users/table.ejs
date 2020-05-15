@@ -1,0 +1,149 @@
+<h1>UsersList</h1>
+<section class="row justify-content-center py-3">
+    <div class="col-6 text-left p-0">
+        <form action="/v1/users/statistic" method="get">
+            <button type="submit" class="btn btn-primary">
+                Get statistic for 30 days
+            </button>
+        </form>
+    </div>
+    <div class="col-6 text-right p-0">
+        <button
+            type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#staticBackdrop"
+            >
+            Add user
+        </button>
+    </div>
+   
+
+    <%- include("./createUserForm.ejs") %> <%- include("./changeUser.ejs") %>
+</section>
+<section class="row justify-content-center">
+    <table class="table table-hover ">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">email</th>
+                <th scope="col"></th>
+                <th scope="col">full name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="userTBody">
+            <% users.forEach(function(user, i){ %>
+            <tr>
+                <th scope="row"><%=i + 1%></th>
+                <td id="user-email"><%=user.email %></td>
+                <td>
+                    <label
+                        class="btn btn-sm btn-outline-info"
+                        data-toggle="modal"
+                        data-target="#staticBackdrop-1"
+                    >
+                        <input
+                            class="visually-hidden"
+                            type="radio"
+                            form="updateUserForm"
+                            name="id"
+                            value="<%=user.id %>"
+                        />
+                        update
+                    </label>
+                </td>
+                <td><%=user.fullName %></td>
+                <td>
+                    <label
+                        class="btn btn-sm btn-outline-danger"
+                        data-toggle="modal"
+                        data-target="#deleteUserModal"
+                    >
+                        <input
+                            class="visually-hidden"
+                            type="radio"
+                            form="deleteUserForm"
+                            name="id"
+                            value="<%=user.id %>"
+                        />
+                        delete
+                    </label>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</section>
+</div>
+<script
+    src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"
+></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"
+></script>
+<script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"
+></script>
+<script>
+const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const tBody = document.querySelector("#userTBody");
+const emailsElem = [...tBody.querySelectorAll("#user-email")];
+
+const emails = emailsElem.map(email => email.textContent);
+
+
+// window.addEventListener("beforeunload", function (emails){
+//   console.log("handlerr!");
+//   const url = "http://localhost:3000/v1/emails";
+//   const options = {
+//     credentials: 'same-origin',
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "CSRF-Token": token
+//     },
+//     body: JSON.stringify({emails})
+//   };
+//   fetch(url, options).then(res => console.log(res));
+    
+// });
+
+// window.onunload = postEmailsHandler(emails);
+
+function postEmailsHandler(emails) {
+  console.log("handlerr!");
+  const url = "http://localhost:3000/v1/emails";
+  const options = {
+    credentials: 'same-origin',
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "CSRF-Token": token
+    },
+    body: JSON.stringify({emails})
+  };
+  return fetch(url, options).then(res => console.log(res));
+};
+window.addEventListener('beforeunload', onbeforeunload);
+function onbeforeunload(e) {
+  const url = "http://localhost:3000/v1/emails";
+  const options = {
+    credentials: 'same-origin',
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "CSRF-Token": token
+    },
+    body: JSON.stringify({emails})
+  };
+  fetch(url, options).then(res => console.log(res));
+  return false;
+};
+</script>
