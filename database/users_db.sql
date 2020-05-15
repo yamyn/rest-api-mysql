@@ -1,3 +1,7 @@
+SET GLOBAL sql_mode
+=
+(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
 CREATE DATABASE users_db;
 
 USE users_db;
@@ -16,3 +20,4 @@ CREATE TABLE users_list
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON
     UPDATE CURRENT_TIMESTAMP
     );
+

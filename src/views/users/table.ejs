@@ -1,13 +1,43 @@
 <h1>UsersList</h1>
 <section class="row justify-content-center py-3">
-    <div class="col-6 text-left p-0">
+    <div class="col-4 text-left p-0">
         <form action="/v1/users/statistic" method="get">
             <button type="submit" class="btn btn-primary">
                 Get statistic for 30 days
             </button>
         </form>
     </div>
-    <div class="col-6 text-right p-0">
+    <div class="col-4 text-center p-0">
+        <% if (table === 'find') { %>
+            <form action="/v1/users" method="get">
+                <button type="submit" class="btn btn-primary">
+                    Go to back a UserList
+                </button>
+            </form>
+        <% } %> 
+        <% if (table === 'home') { %> 
+            <form action="/v1/users/find" method="post" class="row">
+                <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
+                <div class="form-group col-6">
+                    <input
+                        placeholder="Find with email"
+                        type="email"
+                        class="form-control"
+                        id="userEmail"
+                        aria-describedby="emailHelp"
+                        name="email"
+                    />
+                </div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        <% } %>
+       
+    </div>
+    <div class="col-4 text-right p-0">
         <button
             type="button"
             class="btn btn-primary"

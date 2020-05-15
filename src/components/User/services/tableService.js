@@ -1,6 +1,6 @@
 /* eslint-disable comma-dangle */
 const mySql = require('../../../config/connection').getInstance();
-const tables = 'users_list';
+const table = 'users_list';
 /**
  * @exports
  * @method findAll
@@ -9,20 +9,42 @@ const tables = 'users_list';
  * @returns Promise<UserModel[]>
  */
 function findAll() {
-    const query = `SELECT * FROM ${tables};`;
+    const query = `SELECT * FROM ${table};`;
+
     return mySql.query(query);
 }
 
-// /**
-//  * @exports
-//  * @method findById
-//  * @param {string} id
-//  * @summary get a user
-//  * @returns {Promise<UserModel>}
-//  */
-// function findById(id) {
-//     return UserModel.findById(id).exec();
-// }
+/**
+ * @exports
+ * @method findById
+ * @param {string} id
+ * @summary get a user
+ * @returns {Promise<UserModel>}
+ */
+function findByEmail(email) {
+    const uniqueField = 'email';
+    const query = `SELECT * FROM ${table} WHERE ${uniqueField} = '${email}';`;
+
+    return mySql.query(query);
+}
+
+/**
+ * @exports
+ * @method findById
+ * @param {string} id
+ * @summary get a user
+ * @returns {Promise<UserModel>}
+ */
+function getStatistic(countDay) {
+    const criteria = 'created_at';
+    const choosedFieldQuery = `SELECT DATE_FORMAT(${table}.${criteria}, '%d.%m.%Y') AS date, COUNT(id) AS count FROM ${table}`;
+    const expressionQuery = `WHERE ${criteria} > NOW() - INTERVAL ${countDay} DAY`;
+    const groupQuery = `GROUP BY DATE_FORMAT(${table}.${criteria}, '%d.%m.%Y')`;
+    const orderQuery = `ORDER BY ${table}.${criteria}`;
+    const query = `${choosedFieldQuery} ${expressionQuery} ${groupQuery} ${orderQuery}`;
+
+    return mySql.query(query);
+}
 
 /**
  * @exports
@@ -32,7 +54,8 @@ function findAll() {
  * @returns {Promise<UserModel>}
  */
 function create({ fullName, email }) {
-    const query = `INSERT INTO ${tables} VALUES (NULL, '${fullName}', '${email}', NOW(), NOW());`;
+    const query = `INSERT INTO ${table} VALUES (NULL, '${fullName}', '${email}', NOW(), NOW();`;
+
     return mySql.query(query);
 }
 
@@ -48,7 +71,7 @@ function create({ fullName, email }) {
 function updateById({ id, fullName }) {
     const uniqueField = 'id';
     const changedField = 'fullName';
-    const query = `UPDATE ${tables} SET ${changedField} = '${fullName}' WHERE ${uniqueField} = ${id};`;
+    const query = `UPDATE ${table} SET ${changedField} = '${fullName}' WHERE ${uniqueField} = ${id};`;
 
     return mySql.query(query);
 }
@@ -62,14 +85,15 @@ function updateById({ id, fullName }) {
  */
 function deleteById(id) {
     const uniqueField = 'id';
-    const query = `DELETE FROM ${tables} WHERE ${uniqueField} = ${id};`;
+    const query = `DELETE FROM ${table} WHERE ${uniqueField} = ${id};`;
 
     return mySql.query(query);
 }
 
 module.exports = {
     findAll,
-    // findById,
+    findByEmail,
+    getStatistic,
     create,
     updateById,
     deleteById,

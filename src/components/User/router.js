@@ -18,24 +18,25 @@ const router = Router();
  */
 router.get('/', UserComponent.findAll);
 
-// /**
-//  * Route serving list of users.
-//  * @name /v1/users
-//  * @function
-//  * @inner
-//  * @param {string} path - Express path
-//  * @param {callback} middleware - Express middleware.
-//  */
-// router.get('/statistic', UserComponent.getStatistic);
-// /**
-//  * Route serving a user
-//  * @name /v1/users/:id
-//  * @function
-//  * @inner
-//  * @param {string} path - Express path
-//  * @param {callback} middleware - Express middleware.
-//  */
-// // router.get('/:id', UserComponent.findById);
+/**
+ * Route serving list of users.
+ * @name /v1/users
+ * @function
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.get('/statistic', UserComponent.getStatistic);
+
+/**
+ * Route serving a user
+ * @name /v1/users/:email
+ * @function
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+router.post('/find', UserComponent.findByEmail);
 
 /**
  * Route serving a new user

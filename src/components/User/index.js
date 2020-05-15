@@ -1,7 +1,7 @@
 const UserService = require('./services/tableService');
 // const UserValidation = require('./validation');
 // const ValidationError = require('../../error/ValidationError');
-// const getUserStat = require('./services/statistic');
+const transformateStat = require('./services/statistic');
 
 /**
  * @function
@@ -15,6 +15,7 @@ async function findAll(req, res, next) {
         const users = await UserService.findAll();
 
         res.status(200).render('index', {
+            table: 'home',
             csrfToken: req.csrfToken(),
             template: 'users/table.ejs',
             users,
@@ -32,67 +33,77 @@ async function findAll(req, res, next) {
     }
 }
 
-// /**
-//  * @function
-//  * @param {express.Request} req
-//  * @param {express.Response} res
-//  * @param {express.NextFunction} next
-//  * @returns {Promise < void >}
-//  */
-// async function getStatistic(req, res, next) {
-//     try {
-//         const statistic = await getUserStat(30);
-//         res.status(200).render('index', {
-//             csrfToken: req.csrfToken(),
-//             template: 'users/statistic.ejs',
-//             statistic,
-//             errors: req.flash('error'),
-//             successes: req.flash('sucsess'),
-//         });
-//     } catch (error) {
-//         req.flash('error', { name: error.name, message: error.message });
-//         res.redirect('/v1/users');
+/**
+ * @function
+ * @param {express.Request} req
+ * @param {express.Response} res
+ * @param {express.NextFunction} next
+ * @returns {Promise < void >}
+ */
+async function getStatistic(req, res, next) {
+    try {
+        const statisticArr = await UserService.getStatistic(30);
+        const statistic = transformateStat(statisticArr);
 
-//         next(error);
-//     }
-// }
+        res.status(200).render('index', {
+            csrfToken: req.csrfToken(),
+            template: 'users/statistic.ejs',
+            statistic,
+            errors: req.flash('error'),
+            successes: req.flash('sucsess'),
+        });
+        res.redirect('/v1/users');
+    } catch (error) {
+        req.flash('error', { name: error.name, message: error.message });
+        res.redirect('/v1/users');
 
-// /**
-//  * @function
-//  * @param {express.Request} req
-//  * @param {express.Response} res
-//  * @param {express.NextFunction} next
-//  * @returns {Promise < void >}
-//  */
-// async function findById(req, res, next) {
-//     try {
-//         const { error } = UserValidation.findById(req.params);
+        next(error);
+    }
+}
 
-//         if (error) {
-//             throw new ValidationError(error.details);
-//         }
+/**
+ * @function
+ * @param {express.Request} req
+ * @param {express.Response} res
+ * @param {express.NextFunction} next
+ * @returns {Promise < void >}
+ */
+async function findByEmail(req, res, next) {
+    try {
+        // const { error } = UserValidation.findById(req.params);
 
-//         const user = await UserService.findById(req.params.id);
+        // if (error) {
+        //     throw new ValidationError(error.details);
+        // }
+        // console.log(req.body.email);
+        const users = await UserService.findByEmail(req.body.email);
 
-//         return res.status(200).json({
-//             data: user,
-//         });
-//     } catch (error) {
-//         if (error instanceof ValidationError) {
-//             return res.status(422).json({
-//                 error: error.name,
-//                 details: error.message,
-//             });
-//         }
+        if (users.length === 0) {
+            req.flash('error', { name: 'Not Found', message: `User with email ${req.body.email} not found!` });
+            res.redirect('/v1/users');
+        }
+        res.status(200).render('index', {
+            table: 'find',
+            csrfToken: req.csrfToken(),
+            template: 'users/table.ejs',
+            users,
+            errors: req.flash('error'),
+            successes: req.flash('sucsess'),
+        });
+    } catch (error) {
+        // if (error instanceof ValidationError) {
+        //     return res.status(422).json({
+        //         error: error.name,
+        //         details: error.message,
+        //     });
+        // }
 
-//         res.status(500).json({
-//             message: error.name,
-//             details: error.message,
-//         });
+        req.flash('error', { name: error.name, message: error.message });
+        res.redirect('/v1/users');
 
-//         return next(error);
-//     }
-// }
+        next(error);
+    }
+}
 
 /**
  * @function
@@ -214,8 +225,8 @@ async function deleteById(req, res, next) {
 
 module.exports = {
     findAll,
-    // getStatistic,
-    // findById,
+    getStatistic,
+    findByEmail,
     create,
     updateById,
     deleteById,
