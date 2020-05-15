@@ -47,24 +47,24 @@ router.get('/', UserComponent.findAll);
  */
 router.post('/', UserComponent.create);
 
-// /**
-//  * Route serving a new user
-//  * @name /v1/users
-//  * @function
-//  * @inner
-//  * @param {string} path - Express path
-//  * @param {callback} middleware - Express middleware
-//  */
-// router.put('/', UserComponent.updateById);
+/**
+ * Route serving a new user
+ * @name /v1/users
+ * @function
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware
+ */
+router.put('/', UserComponent.updateById);
 
-// /**
-//  * Route serving a new user
-//  * @name /v1/users
-//  * @function
-//  * @inner
-//  * @param {string} path -Express path
-//  * @param {callback} middleware - Express middleware
-//  */
-// router.delete('/', UserComponent.deleteById);
+/**
+ * Route serving a new user
+ * @name /v1/users
+ * @function
+ * @inner
+ * @param {string} path -Express path
+ * @param {callback} middleware - Express middleware
+ */
+router.delete('/', UserComponent.deleteById);
 
 module.exports = router;
