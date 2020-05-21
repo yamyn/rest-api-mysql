@@ -54,7 +54,7 @@ function getStatistic(countDay) {
  * @returns {Promise<ResultSetHeader>}
  */
 function create({ fullName, email }) {
-    const query = `INSERT INTO ${table} VALUES (NULL, '${fullName}', '${email}', NOW(), NOW());`;
+    const query = `INSERT INTO ${table} (fullName, email) VALUES ('${fullName}', '${email}');`;
 
     return mySql.query(query);
 }
