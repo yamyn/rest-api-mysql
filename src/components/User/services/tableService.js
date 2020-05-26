@@ -16,23 +16,24 @@ function findAll() {
 
 /**
  * @exports
- * @method findById
- * @param {string} id
+ * @method findByEmail
+ * @param {string} email
  * @summary get a user
  * @returns {Promise<User>}
  */
 function findByEmail(email) {
     const uniqueField = 'email';
-    const query = `SELECT * FROM ${table} WHERE ${uniqueField} = '${email}';`;
+    const query = `SELECT * FROM ${table} WHERE ${uniqueField} = ?`;
+    const params = [email];
 
-    return mySql.query(query);
+    return mySql.query(query, params);
 }
 
 /**
  * @exports
- * @method findById
- * @param {string} id
- * @summary get a user
+ * @method getStatistic
+ * @param {number} countDay
+ * @summary get a user statistic
  * @returns {Promise<Cursor>}
  */
 function getStatistic(countDay) {
@@ -70,9 +71,10 @@ function create({ fullName, email }) {
 function updateById({ id, fullName }) {
     const uniqueField = 'id';
     const changedField = 'fullName';
-    const query = `UPDATE ${table} SET ${changedField} = '${fullName}' WHERE ${uniqueField} = ${id};`;
+    const query = `UPDATE ${table} SET ${changedField} = ? WHERE ${uniqueField} = ?`;
+    const params = [fullName, id];
 
-    return mySql.query(query);
+    return mySql.query(query, params);
 }
 
 /**
@@ -84,9 +86,10 @@ function updateById({ id, fullName }) {
  */
 function deleteById(id) {
     const uniqueField = 'id';
-    const query = `DELETE FROM ${table} WHERE ${uniqueField} = ${id};`;
+    const query = `DELETE FROM ${table} WHERE ${uniqueField} = ?`;
+    const params = [id];
 
-    return mySql.query(query);
+    return mySql.query(query, params);
 }
 
 module.exports = {
