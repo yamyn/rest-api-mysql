@@ -5,7 +5,8 @@
     "scripts": {
         "start": "node src/server/index.js",
         "screen": "node src/components/Screens/services/toMakeScreen.js",
-        "addtable": "node database"
+        "addtable": "node database",
+        "test": "NODE_ENV=test jest ./test --forceExit"
     },
     "dependencies": {
         "@hapi/joi": "17.1.0",
@@ -37,7 +38,10 @@
         "eslint-config-prettier": "6.10.0",
         "eslint-plugin-import": "2.20.1",
         "eslint-plugin-node": "11.0.0",
-        "eslint-plugin-prettier": "3.1.2"
+        "eslint-plugin-prettier": "3.1.2",
+        "faker": "^4.1.0",
+        "jest": "^26.0.1",
+        "supertest": "^4.0.2"
     },
     "config": {
         "commitizen": {

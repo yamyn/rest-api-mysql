@@ -1,4 +1,6 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const dotenvOptions = process.env.NODE_ENV ? { path: `.env.${process.env.NODE_ENV}` } : { path: '.env' };
+dotenv.config(dotenvOptions);
 
 const config = {
     port: process.env.PORT,

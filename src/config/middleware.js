@@ -29,7 +29,18 @@ module.exports = {
         // parse Cookie header and populate req.cookies with an object keyed by the cookie names.
         app.use(cookieParser());
         //added csrf token for request with to use cookie
-        app.use(csrf({ cookie: true }));
+        process.env.NODE_ENV === 'test'
+            ? app.use(
+                  csrf({
+                      cookie: true,
+                      ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+                  }),
+              )
+            : app.use(
+                  csrf({
+                      cookie: true,
+                  }),
+              );
         // returns the compression middleware
         app.use(compression());
         //TODO
