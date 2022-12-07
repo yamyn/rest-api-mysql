@@ -22,7 +22,7 @@
         "ejs": "3.0.1",
         "es6-promise": "^4.2.8",
         "eslint-config-airbnb": "18.0.1",
-        "express": "4.16.2",
+        "express": "4.17.3",
         "express-session": "1.17.0",
         "googleapis": "39.2.0",
         "helmet": "3.21.3",
